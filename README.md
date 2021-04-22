@@ -213,7 +213,7 @@ int main(int argc,char const *argv[])
     int b[10] = a;  //编译无法通过 error：invalid initializer
             //非法的初始化，因此不可以用一个数组变量来初始化一个数组变量
     int* const q = p;             //编译通过，这也是通常的用法
-    printf("q=%p,p=%p\n", q, p);  //运行结果 q=0022FEE0,p=0022FEE0
+    printf("q=%p,p=%p\n", q, p);  //运行结果 q=0062FDF0,p=0062FDF0
             //可见q和p是一样的，因此可以用一个const指针来初始化一个const指针
 */
     //测试2：（由于影响编译，因此将其注释掉，与其他测试并非在同一次中进行）
@@ -221,7 +221,7 @@ int main(int argc,char const *argv[])
     //能否用一个const指针来初始化一个数组变量？
 /*
     int* const q = a;           //编译通过，这也是通常的用法
-    printf("q=%p,a=%p\n", q, a);  //运行结果 q=0022FEE0,a=0022FEE0
+    printf("q=%p,a=%p\n", q, a);  //运行结果 q=0062FDF0,a=0062FDF0
             //可见q和a是一样的，因此可以用一个数组变量来初始化一个const指针
     int b[10] = p;  //编译无法通过 error：invalid initializer
             //非法的初始化，因此不可以用一个const指针来初始化一个数组变量
@@ -232,7 +232,7 @@ int main(int argc,char const *argv[])
     //能否对一个const指针进行sizeof()运算，结果是什么？
 
     printf("sizeof(a)=%d\n", sizeof(a));    //编译通过，运行结果 sizeof(a)=40
-    printf("sizeof(p)=%d\n", sizeof(p));    //编译通过，运行结果 sizeof(p)=4
+    printf("sizeof(p)=%d\n", sizeof(p));    //编译通过，运行结果 sizeof(p)=8 
             //sizeof(a)得到的是整个数组的大小4*sizeof(int)
             //sizeof(p)得到的是一个指针的大小
 
@@ -242,11 +242,11 @@ int main(int argc,char const *argv[])
     //能否对一个数组变量进行“&”运算，结果是什么？
     //能否对一个const指针进行“&”运算，结果是什么？
 
-    printf("a=%p\n", a);            //编译通过，运行结果 a=0022FEE8
-    printf("p=%p\n", p);            //编译通过，运行结果 p=0022FEE8
-    printf("&a=%p\n", &a);          //编译通过，运行结果 &a=0022FEE8
-    printf("&a[0]=%p\n", &a[0]);    //编译通过，运行结果 &a[0]=0022FEE8
-    printf("&p=%p\n", &p);          //编译通过，运行结果 &p=0022FEE4
+    printf("a=%p\n", a);            //编译通过，运行结果 a=0062FDF0
+    printf("p=%p\n", p);            //编译通过，运行结果 p=0062FDF0
+    printf("&a=%p\n", &a);          //编译通过，运行结果 &a=0062FDF0
+    printf("&a[0]=%p\n", &a[0]);    //编译通过，运行结果 &a[0]=0062FDF0
+    printf("&p=%p\n", &p);          //编译通过，运行结果 &p=0062FDE8
             //对数组变量和const指针都能进行“&”运算
             //a,&a,&a[0]的值相同，说明a的值是一个地址，所以可以把a赋给p
             //a与&a相同，都是数组a的第一个元素a[0]的地址
@@ -254,9 +254,9 @@ int main(int argc,char const *argv[])
             //&p取到的是p这个constant量自己在内存中的地址，和普通变量一样
             //a的地址竟然是它自己，这个确实很有趣，可以理解，但有点说不通?
 /*补充:
-	        a和&a的值都是是0022FEE8
-			a+1的值是0022FEEC
-			&a+1的值是0022FF10
+	        a和&a的值都是是0062FDF0
+			a+1的值是0062FDF4
+			&a+1的值是0062FE18
 			可见，a+1的值比a多了一个int，&a+1的值比&a多了40个字节，也就是整个a[10]数组的大小，
 			可见，a指的是一个数组元素的地址，就相当于&a[0]，而&a是指整个数组的地址，
 			所以当他们分别加1以后，出现的结果是a+1往后移动了一个元素，而&a+1往后移动了一整个数组。很神奇啊！
@@ -284,8 +284,8 @@ int main(int argc,char const *argv[])
     //数组变量+1是什么？
     //const指针+1是什么？
 
-    printf("a+1=%p\n", a+1);        //编译通过，运行结果 a+1=0022FEEC
-    printf("p+1=%p\n", p+1);        //编译通过，运行结果 p+1=0022FEEC
+    printf("a+1=%p\n", a+1);        //编译通过，运行结果 a+1=0062FDF4
+    printf("p+1=%p\n", p+1);        //编译通过，运行结果 p+1=0062FDF4
     printf("*(a+1)=%d\n", *(a+1));  //编译通过，运行结果 *(a+1)=1
     printf("*(p+1)=%d\n", *(p+1));  //编译通过，运行结果 *(p+1)=1
     printf("a[1]=%d\n", a[1]);      //编译通过，运行结果 a[1]=1
